@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 @EnableJpaRepositories("com.example.consecionaria.repository")
-@EntityScan("com.example.consecionaria.entity")
+@EntityScan({"com.example.consecionaria.entity", "com.example.consecionaria.enums"})
 @ComponentScan("com.example.consecionaria.*")
 @EnableWebMvc
 public class DemoApplication {

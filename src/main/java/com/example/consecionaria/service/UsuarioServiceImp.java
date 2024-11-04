@@ -1,9 +1,9 @@
 package com.example.consecionaria.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.consecionaria.dto.UsuarioDto;
-import com.example.consecionaria.entity.Rol;
 import com.example.consecionaria.entity.Sucursal;
 import com.example.consecionaria.entity.Usuario;
 import com.example.consecionaria.repository.UsuarioRepository;
@@ -16,12 +16,11 @@ public class UsuarioServiceImp implements UsuarioService {
 
     private Usuario convertToEntity(UsuarioDto usuarioDto) {
         Usuario usuario = new Usuario();
-        // No establecer idUsuario aquí, debe ser generado automáticamente
         usuario.setNombre(usuarioDto.getNombre());
         usuario.setCorreo(usuarioDto.getCorreo());
         usuario.setContrasena(usuarioDto.getContrasena());
         usuario.setSucursal(new Sucursal(usuarioDto.getIdSucursal()));
-        usuario.setRol(new Rol(usuarioDto.getIdRol()));
+        usuario.setRol(usuarioDto.getRol());
         return usuario;
     }
 
@@ -32,7 +31,7 @@ public class UsuarioServiceImp implements UsuarioService {
         usuarioDto.setCorreo(usuario.getCorreo());
         usuarioDto.setContrasena(usuario.getContrasena());
         usuarioDto.setIdSucursal(usuario.getSucursal().getIdSucursal());
-        usuarioDto.setIdRol(usuario.getRol().getIdRol());
+        usuarioDto.setRol(usuario.getRol()); 
         return usuarioDto;
     }
 
@@ -47,4 +46,15 @@ public class UsuarioServiceImp implements UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         return convertToDto(usuario);
     }
+
+	@Override
+	public UsuarioDto verificarCredenciales(String correo, String contrasena) throws Exception {
+		 Usuario usuario = usuarioRepository.findByCorreo(correo)
+	                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+	        if (new BCryptPasswordEncoder().matches(contrasena, usuario.getContrasena())) {
+	            return convertToDto(usuario);
+	        } else {
+	            throw new Exception("Credenciales inválidas");
+	        }
+	}
 }

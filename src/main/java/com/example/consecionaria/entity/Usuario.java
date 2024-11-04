@@ -3,6 +3,7 @@ package com.example.consecionaria.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.example.consecionaria.enums.Rol;
 
 @Data
 @Entity
@@ -22,8 +23,7 @@ public class Usuario {
     @JoinColumn(name = "idSucursal")
     private Sucursal sucursal;
 
-    @ManyToOne
-    @JoinColumn(name = "idRol")
+    @Enumerated(EnumType.STRING)
     private Rol rol;
 
     public void setContrasena(String contrasena) {
