@@ -23,6 +23,16 @@ public class UsuarioController {
         UsuarioDto usuarioGuardado = usuarioService.saveUsuario(usuarioDto);
         return new ResponseEntity<>(usuarioGuardado, HttpStatus.CREATED);
     }
+    
+    @GetMapping("/correo/{correo}")
+    public ResponseEntity<UsuarioDto> obtenerPorCorreo(@PathVariable String correo) {
+        try {
+            UsuarioDto usuarioDto = usuarioService.findByCorreo(correo);
+            return new ResponseEntity<>(usuarioDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/login")
     public ResponseEntity<UsuarioDto> login(@RequestBody UsuarioDto usuarioDto) {

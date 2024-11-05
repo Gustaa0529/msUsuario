@@ -2,7 +2,9 @@ package com.example.consecionaria.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.example.consecionaria.enums.Rol;
 
 @Data
