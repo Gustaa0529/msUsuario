@@ -3,8 +3,7 @@ package com.example.consecionaria.enums;
 public enum Rol {
 	
 	    ADMIN("Admin"),
-	    EMPLEADO("Empleado"),
-	    PORTA_AUTOMOVILES("Porta Automóviles");
+	    EMPLEADO("Empleado");
 
 	    private String displayName;
 

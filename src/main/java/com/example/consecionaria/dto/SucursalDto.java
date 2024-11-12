@@ -8,6 +8,5 @@ public class SucursalDto {
 	
     private int idSucursal;
     private String direccion;
-    private List<UsuarioDto> usuarios; 
 
 }

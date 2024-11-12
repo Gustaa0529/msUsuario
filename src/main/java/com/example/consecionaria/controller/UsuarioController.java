@@ -1,11 +1,17 @@
 package com.example.consecionaria.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.consecionaria.dto.PaginadoDto;
+import com.example.consecionaria.dto.SucursalDto;
 import com.example.consecionaria.dto.UsuarioDto;
 import com.example.consecionaria.service.UsuarioService;
 
@@ -64,5 +70,28 @@ public class UsuarioController {
     @GetMapping("/perfil")
     public ResponseEntity<UsuarioDto> obtenerPerfil(@SessionAttribute("user") UsuarioDto usuarioDto) {
         return new ResponseEntity<>(usuarioDto, HttpStatus.OK);
+    }
+    
+    @GetMapping(value = "/listar/paginado", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<PaginadoDto<UsuarioDto>> listarConPaginado(
+			@RequestParam Integer size,
+			@RequestParam String sort,
+			@RequestParam Integer numPage
+			) throws Exception {
+		Page<UsuarioDto> pageResult = usuarioService.listarUsuariosPaginados(size, sort, numPage);
+		PaginadoDto<UsuarioDto> response = new PaginadoDto<>(
+				pageResult.getContent(),
+				pageResult.getTotalElements(),
+				pageResult.getTotalPages(),
+				pageResult.getSize(),
+				pageResult.getNumber()
+				);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+    
+    @GetMapping("/sucursales")
+    public ResponseEntity<List<SucursalDto>> listarSucursales() throws Exception {
+        List<SucursalDto> sucursales = usuarioService.listarSucursales();
+        return new ResponseEntity<>(sucursales, HttpStatus.OK);
     }
 }
